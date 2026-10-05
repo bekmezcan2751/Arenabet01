@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ArenaBet — Demo Admin Panel</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080d18;color:#eef2f7;font-family:Arial,sans-serif}
+header{height:68px;background:#101827;border-bottom:1px solid #26344d;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:5}
+.logo{font-size:23px;font-weight:900;color:#f4c542}.logo span{color:#fff}.admin{color:#aebbd0;font-size:13px}
+.layout{display:flex;min-height:calc(100vh - 68px)}aside{width:230px;background:#0c1320;border-right:1px solid #243149;padding:18px 12px}
+nav button{width:100%;background:none;color:#aebbd0;border:0;text-align:left;padding:13px 14px;border-radius:10px;margin:3px 0;cursor:pointer;font-size:14px}nav button.active,nav button:hover{background:#18243a;color:#fff}
+main{flex:1;padding:22px;max-width:1200px}.page{display:none}.page.active{display:block}h1{font-size:24px;margin:0 0 18px}h2{font-size:17px;margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.card{background:#111b2b;border:1px solid #293953;border-radius:14px;padding:17px}.card small{color:#94a3b8}.card strong{display:block;font-size:23px;margin-top:7px;color:#f4c542}
+.panel{background:#101927;border:1px solid #293953;border-radius:14px;padding:17px;margin-bottom:18px}.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+input,select{background:#0b1320;color:#fff;border:1px solid #34445f;border-radius:8px;padding:10px;outline:none}button.primary{background:#f4c542;color:#111;border:0;padding:10px 14px;border-radius:8px;font-weight:800;cursor:pointer}button.danger{background:#7f2630;color:#fff;border:0;padding:9px 12px;border-radius:8px;cursor:pointer}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid #25334b}th{color:#94a3b8}.tag{padding:4px 8px;border-radius:20px;background:#182b45;color:#9fc5ff}.tag.green{background:#163628;color:#78e0a6}
+.notice{padding:11px 13px;background:#171f2f;border:1px solid #35445e;border-radius:10px;color:#b9c5d6;font-size:12px;margin-bottom:16px}
+@media(max-width:800px){aside{width:66px}nav button{font-size:0;text-align:center}nav button:first-letter{font-size:18px}.cards{grid-template-columns:repeat(2,1fr)}main{padding:14px}table{min-width:700px}.panel{overflow:auto}}
+</style>
+</head>
+<body>
+<header><div class="logo">ARENA<span>BET</span> <small style="font-size:11px;color:#94a3b8">DEMO ADMIN</small></div><div class="admin">Yönetici • Demo Mod</div></header>
+<div class="layout">
+<aside><nav>
+<button class="active" onclick="show('dashboard',this)">📊 Genel Bakış</button>
+<button onclick="show('users',this)">👤 Kullanıcılar</button>
+<button onclick="show('bets',this)">🎟️ Kuponlar</button>
+<button onclick="show('matches',this)">⚽ Maçlar</button>
+<button onclick="show('wallet',this)">💰 Sanal Cüzdan</button>
+</nav></aside>
+<main>
+<section id="dashboard" class="page active">
+<h1>Genel Bakış</h1><div class="notice">Bu panel yalnızca demo/simülasyon içindir. Gerçek para, gerçek ödeme veya gerçek bahis işlemi bulunmaz.</div>
+<div class="cards"><div class="card"><small>Kullanıcı</small><strong id="userCount">128</strong></div><div class="card"><small>Aktif Kupon</small><strong id="betCount">37</strong></div><div class="card"><small>Sanal Bakiye</small><strong>₺842.450</strong></div><div class="card"><small>Bugünkü Demo Kupon</small><strong>96</strong></div></div>
+<div class="panel"><h2>Hızlı İşlemler</h2><div class="row"><button class="primary" onclick="show('users')">Kullanıcı Yönet</button><button class="primary" onclick="show('matches')">Maç Ekle</button><button class="primary" onclick="show('wallet')">Sanal Bakiye Düzenle</button></div></div>
+</section>
+
+<section id="users" class="page"><h1>Kullanıcı Yönetimi</h1>
+<div class="panel"><div class="row"><input id="newUser" placeholder="Kullanıcı adı"><input id="newBal" type="number" placeholder="Sanal bakiye"><button class="primary" onclick="addUser()">Kullanıcı Ekle</button></div>
+<table><thead><tr><th>ID</th><th>Kullanıcı</th><th>Sanal Bakiye</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="usersBody"></tbody></table></div></section>
+
+<section id="bets" class="page"><h1>Demo Kuponları</h1><div class="panel"><table><thead><tr><th>Kupon</th><th>Kullanıcı</th><th>Seçim</th><th>Tutar</th><th>Oran</th><th>Durum</th><th></th></tr></thead><tbody id="betsBody"></tbody></table></div></section>
+
+<section id="matches" class="page"><h1>Maç & Oran Yönetimi</h1><div class="panel"><div class="row"><input id="home" placeholder="Ev sahibi"><input id="away" placeholder="Deplasman"><input id="o1" placeholder="1 oran"><input id="ox" placeholder="X oran"><input id="o2" placeholder="2 oran"><button class="primary" onclick="addMatch()">Maç Ekle</button></div><table><thead><tr><th>Maç</th><th>1</th><th>X</th><th>2</th><th>İşlem</th></tr></thead><tbody id="matchesBody"></tbody></table></div></section>
+
+<section id="wallet" class="page"><h1>Sanal Cüzdan</h1><div class="notice">Buradaki işlemler yalnızca demo bakiyeyi değiştirir. Gerçek ödeme altyapısı yoktur.</div>
+<div class="panel"><div class="row"><select id="walletUser"></select><input id="walletAmount" type="number" placeholder="Tutar"><button class="primary" onclick="changeBalance(1)">+ Sanal Bakiye</button><button class="danger" onclick="changeBalance(-1)">− Sanal Bakiye</button></div><div id="walletMsg"></div></div></section>
+</main></div>
+<script>
+let users=[['001','AliDemir',12500],['002','Mert34',8200],['003','CanPro',25400],['004','AyseLina',6100]];
+let bets=[['B-1001','AliDemir','İstanbul FC • MS 1',250,1.85,'Bekliyor'],['B-1002','Mert34','Madrid United • MS 1',400,1.60,'Kazandı'],['B-1003','CanPro','Akdenizspor • MS 2',150,2.75,'Kaybetti']];
+let matches=[['İstanbul FC','Anadolu SK','1.85','3.40','3.10'],['Akdenizspor','Başkent FK','2.05','3.20','2.75']];
+function show(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');if(btn){document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}render()}
+function render(){
+document.getElementById('userCount').textContent=users.length+124;
+document.getElementById('betCount').textContent=bets.length+34;
+document.getElementById('usersBody').innerHTML=users.map((u,i)=>`<tr><td>${u[0]}</td><td>${u[1]}</td><td>₺${u[2].toLocaleString('tr-TR')}</td><td><span class="tag green">Aktif</span></td><td><button class="danger" onclick="delUser(${i})">Sil</button></td></tr>`).join('');
+document.getElementById('betsBody').innerHTML=bets.map((b,i)=>`<tr><td>${b[0]}</td><td>${b[1]}</td><td>${b[2]}</td><td>₺${b[3]}</td><td>${b[4]}</td><td><span class="tag">${b[5]}</span></td><td><button class="danger" onclick="delBet(${i})">Sil</button></td></tr>`).join('');
+document.getElementById('matchesBody').innerHTML=matches.map((m,i)=>`<tr><td>${m[0]} - ${m[1]}</td><td>${m[2]}</td><td>${m[3]}</td><td>${m[4]}</td><td><button class="danger" onclick="delMatch(${i})">Sil</button></td></tr>`).join('');
+document.getElementById('walletUser').innerHTML=users.map((u,i)=>`<option value="${i}">${u[1]} — ₺${u[2].toLocaleString('tr-TR')}</option>`).join('');
+}
+function addUser(){let n=document.getElementById('newUser').value.trim(),b=Number(document.getElementById('newBal').value)||0;if(!n)return alert('Kullanıcı adı girin.');users.push([String(Date.now()).slice(-4),n,b]);document.getElementById('newUser').value='';document.getElementById('newBal').value='';render()}
+function delUser(i){if(confirm('Demo kullanıcı silinsin mi?')){users.splice(i,1);render()}}
+function delBet(i){bets.splice(i,1);render()}
+function addMatch(){let h=home.value.trim(),a=away.value.trim();if(!h||!a)return alert('Takım adlarını girin.');matches.push([h,a,o1.value||'1.90',ox.value||'3.20',o2.value||'3.20']);home.value=away.value=o1.value=ox.value=o2.value='';render()}
+function delMatch(i){matches.splice(i,1);render()}
+function changeBalance(dir){let i=Number(walletUser.value),amt=Number(walletAmount.value)||0;if(!users[i]||amt<=0)return alert('Geçerli kullanıcı ve tutar seçin.');users[i][2]+=dir*amt;document.getElementById('walletMsg').innerHTML='<div class="notice">Demo bakiye güncellendi.</div>';walletAmount.value='';render()}
+render();
+</script>
+</body></html>
