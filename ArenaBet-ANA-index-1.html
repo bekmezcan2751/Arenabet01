@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArenaBet Demo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#090d18;color:#fff}
+header{background:linear-gradient(135deg,#111a2d,#090d18);padding:18px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #26334d;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:900;color:#f4c542}.logo span{color:#fff}
+.balance{background:#151f33;border:1px solid #3a4967;padding:9px 12px;border-radius:12px;font-size:13px}
+.balance b{color:#f4c542}
+.container{max-width:900px;margin:auto;padding:18px 14px 100px}
+.notice{background:#121c2e;border:1px solid #2b3b5b;border-radius:14px;padding:13px;margin-bottom:18px;color:#cbd5e1;font-size:13px}
+h2{font-size:19px;margin:18px 0 10px}.league{background:#101827;border:1px solid #273650;border-radius:16px;margin:12px 0;overflow:hidden}
+.league-title{padding:12px 14px;background:#151f31;color:#cbd5e1;font-size:13px}
+.match{padding:14px;border-top:1px solid #202d43}.teams{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px;font-weight:700}
+.time{color:#94a3b8;font-size:12px;font-weight:normal}
+.odds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.odd{background:#1a263b;border:1px solid #344563;color:#fff;padding:11px 5px;border-radius:10px;text-align:center;cursor:pointer}
+.odd:hover,.odd.active{border-color:#f4c542;background:#2a2b29}.odd small{display:block;color:#94a3b8;font-size:10px;margin-bottom:4px}.odd b{color:#f4c542}
+.slip{position:fixed;bottom:0;left:0;right:0;background:#0f1726;border-top:1px solid #344563;padding:12px;z-index:10}
+.slip-inner{max-width:900px;margin:auto;display:flex;align-items:center;gap:12px}.slip-info{flex:1;font-size:13px}.slip-info span{color:#f4c542}.stake{width:105px;background:#18243a;border:1px solid #344563;color:white;padding:10px;border-radius:9px}
+button{background:#f4c542;border:0;padding:11px 16px;border-radius:10px;font-weight:800;cursor:pointer}.clear{background:#29364d;color:#fff}
+.empty{color:#94a3b8}
+@media(max-width:600px){.slip-inner{flex-wrap:wrap}.slip-info{min-width:100%}.stake{flex:1}button{flex:1}.odds{gap:5px}.odd{padding:10px 3px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">ARENA<span>BET</span></div>
+  <div class="balance">Sanal Bakiye: <b id="balance">₺10.000,00</b></div>
+</header>
+
+<div class="container">
+  <div class="notice">⚠️ <b>Demo sürüm:</b> Bu sitede gerçek para yatırma, çekme veya gerçek bahis işlemi bulunmaz. Tüm bakiye ve oranlar örnektir.</div>
+  <h2>⚽ Bugünün Maçları</h2>
+
+  <div class="league">
+    <div class="league-title">🇹🇷 Süper Lig • Örnek Karşılaşmalar</div>
+    <div class="match">
+      <div class="teams"><span>İstanbul FC</span><span class="time">20:00</span><span>Anadolu SK</span></div>
+      <div class="odds">
+        <div class="odd" onclick="pick(this,'İstanbul FC','1',1.85)"><small>MS 1</small><b>1.85</b></div>
+        <div class="odd" onclick="pick(this,'İstanbul FC - Anadolu SK','X',3.40)"><small>MS X</small><b>3.40</b></div>
+        <div class="odd" onclick="pick(this,'Anadolu SK','2',3.10)"><small>MS 2</small><b>3.10</b></div>
+      </div>
+    </div>
+    <div class="match">
+      <div class="teams"><span>Akdenizspor</span><span class="time">22:00</span><span>Başkent FK</span></div>
+      <div class="odds">
+        <div class="odd" onclick="pick(this,'Akdenizspor','1',2.05)"><small>MS 1</small><b>2.05</b></div>
+        <div class="odd" onclick="pick(this,'Akdenizspor - Başkent FK','X',3.20)"><small>MS X</small><b>3.20</b></div>
+        <div class="odd" onclick="pick(this,'Başkent FK','2',2.75)"><small>MS 2</small><b>2.75</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="league">
+    <div class="league-title">🌍 Avrupa Ligi • Örnek Karşılaşmalar</div>
+    <div class="match">
+      <div class="teams"><span>Madrid United</span><span class="time">21:45</span><span>Roma City</span></div>
+      <div class="odds">
+        <div class="odd" onclick="pick(this,'Madrid United','1',1.60)"><small>MS 1</small><b>1.60</b></div>
+        <div class="odd" onclick="pick(this,'Madrid United - Roma City','X',4.00)"><small>MS X</small><b>4.00</b></div>
+        <div class="odd" onclick="pick(this,'Roma City','2',4.80)"><small>MS 2</small><b>4.80</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slip">
+  <div class="slip-inner">
+    <div class="slip-info" id="selection"><span>Kupon:</span> Seçim yapılmadı</div>
+    <input class="stake" id="stake" type="number" min="1" value="100" aria-label="Sanal bahis tutarı">
+    <button class="clear" onclick="clearSlip()">Temizle</button>
+    <button onclick="placeBet()">Demo Kuponu Oyna</button>
+  </div>
+</div>
+
+<script>
+let selected=null;
+const balanceEl=document.getElementById('balance');
+let balance=10000;
+function pick(el,name,type,odd){
+  document.querySelectorAll('.odd').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  selected={name,type,odd};
+  update();
+}
+function update(){
+  const stake=Number(document.getElementById('stake').value)||0;
+  if(!selected){document.getElementById('selection').innerHTML='<span>Kupon:</span> Seçim yapılmadı';return}
+  const win=stake*selected.odd;
+  document.getElementById('selection').innerHTML=`<span>${selected.name} • MS ${selected.type} @ ${selected.odd}</span><br>Potansiyel sanal kazanç: ₺${win.toLocaleString('tr-TR',{minimumFractionDigits:2})}`;
+}
+document.getElementById('stake').addEventListener('input',update);
+function clearSlip(){selected=null;document.querySelectorAll('.odd').forEach(x=>x.classList.remove('active'));update()}
+function placeBet(){
+  const stake=Number(document.getElementById('stake').value)||0;
+  if(!selected)return alert('Önce bir seçim yapın.');
+  if(stake<=0)return alert('Geçerli bir sanal tutar girin.');
+  if(stake>balance)return alert('Sanal bakiyeniz yetersiz.');
+  balance-=stake; balanceEl.textContent='₺'+balance.toLocaleString('tr-TR',{minimumFractionDigits:2});
+  alert('Demo kuponunuz oluşturuldu. Gerçek para kullanılmamaktadır.');
+  clearSlip();
+}
+</script>
+</body>
+</html>
