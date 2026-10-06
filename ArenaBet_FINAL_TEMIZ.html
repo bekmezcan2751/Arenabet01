@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#070b16">
+<title>ArenaBet — Oyun Salonu</title>
+<meta name="description" content="ArenaBet özgün sanal oyun ve spor demo arayüzü">
+<style>
+:root{--bg:#060914;--panel:#0e1629;--panel2:#121d35;--line:#293a5f;--text:#f6f8ff;--muted:#8d9ab5;--gold:#ffd34f;--gold2:#e7a916;--green:#39df9a;--red:#ff6678}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% -10%,#17294f 0,#090f1f 34%,var(--bg) 70%);color:var(--text);font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}
+header{position:sticky;top:0;z-index:20;background:rgba(6,9,20,.93);backdrop-filter:blur(16px);border-bottom:1px solid #263553}
+.top{max-width:1180px;margin:auto;padding:13px 16px;display:flex;align-items:center;gap:14px}.logo{font-size:29px;font-weight:900;white-space:nowrap}.logo span{color:var(--gold)}.logo b{color:#fff}
+.nav{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.nav button,.ghost{background:#101a30;border:1px solid #34476f;color:#fff;border-radius:13px;padding:11px 14px;font-weight:700}.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));border:1px solid #ffe88c!important;color:#111!important}
+.wrap{max-width:1180px;margin:auto;padding:22px 16px 60px}
+.hero{border:1px solid #30466f;border-radius:28px;padding:28px;background:linear-gradient(135deg,#172442cc,#0c1326ee);box-shadow:0 25px 70px #0007}
+.hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:center}.eyebrow{color:var(--gold);font-weight:800;letter-spacing:1px}.hero h1{font-size:46px;margin:8px 0}.hero p{font-size:18px;color:#b4bfd4;line-height:1.5}.notice{margin-top:17px;padding:13px 15px;border-radius:15px;background:#0a1224;border:1px solid #283b60;color:#c6d0e4}.balance{background:#091122;border:1px solid #31466d;border-radius:21px;padding:20px}.balance small{color:var(--muted);display:block}.money{font-size:39px;color:var(--gold);font-weight:900;margin:4px 0 14px}.balance-row{display:flex;gap:8px;flex-wrap:wrap}.balance button{padding:11px 13px;border-radius:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.stat{background:#0d1527;border:1px solid #26385b;border-radius:17px;padding:15px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:21px;margin-top:5px}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:30px 2px 14px}.section-title h2{margin:0;font-size:28px}.pill{font-size:12px;color:var(--green);background:#0b251d;border:1px solid #1c634c;padding:7px 10px;border-radius:999px}
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:linear-gradient(145deg,#111b31,#0a1120);border:1px solid #2d4064;border-radius:22px;padding:16px;box-shadow:0 15px 35px #0003}.card-head{display:flex;justify-content:space-between;gap:8px}.card h3{margin:0;font-size:23px}.tag{font-size:11px;color:#111;background:var(--gold);padding:5px 8px;border-radius:999px;font-weight:900;height:max-content}.sub{color:#8996af;margin:6px 0 14px}.reels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:9px;background:#050914;border:1px solid #253654;border-radius:16px}.reel{height:68px;background:linear-gradient(#fff,#e9ecf5);color:#182033;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:inset 0 -4px 0 #d5d8e1}.reel.spinning{animation:flash .15s infinite}.spin{width:100%;margin-top:12px;padding:14px;background:linear-gradient(135deg,#e5a817,#ffdc63);border-radius:13px;border:0;color:#111;font-size:17px;font-weight:900}.result{text-align:center;min-height:25px;margin-top:9px;font-weight:800;color:var(--gold)}
+.jackpots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.jp{background:linear-gradient(145deg,#121e35,#0b1323);border:1px solid #304466;border-radius:18px;padding:17px;text-align:center}.jp small{color:var(--muted)}.jp strong{display:block;font-size:25px;color:var(--gold);margin-top:6px}
+.lower{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:#0d1527;border:1px solid #293b5d;border-radius:21px;padding:19px}.panel h3{margin-top:0}.mission{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #1e2b45}.mission:last-child{border-bottom:0}.mission small{color:var(--muted)}.badge{color:var(--green);font-weight:800}
+.modal,.win-overlay{display:none;position:fixed;inset:0;z-index:50;background:#000b;align-items:center;justify-content:center;padding:18px}.box{width:min(500px,100%);background:#101a2e;border:1px solid #3a4f78;border-radius:23px;padding:22px;box-shadow:0 25px 80px #000}.close{float:right;background:#222e48;border:0;color:#fff;border-radius:10px;padding:8px 11px}.field{width:100%;padding:13px;margin:7px 0;background:#080e1b;border:1px solid #33476c;color:#fff;border-radius:11px}.hint{color:var(--muted);font-size:13px;line-height:1.5}
+.win-card{width:min(440px,92vw);text-align:center;padding:30px 22px;border-radius:28px;background:linear-gradient(145deg,#172744,#0a1121);border:2px solid var(--gold);box-shadow:0 0 60px #ffd34f55;animation:pop .4s ease}.win-icon{font-size:68px;animation:pulse .7s infinite alternate}.win-title{font-size:44px;font-weight:900;color:var(--gold);margin:8px 0}.win-amount{font-size:26px;font-weight:800;margin-bottom:18px}.win-close{background:linear-gradient(135deg,#e6a917,#ffdc62);border:0;border-radius:13px;padding:13px 30px;font-weight:900}
+.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(80px);z-index:80;background:#111c32;border:1px solid #40557e;color:#fff;padding:12px 17px;border-radius:13px;opacity:0;transition:.25s}.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+footer{text-align:center;color:#68758f;margin-top:35px;font-size:13px}
+@keyframes flash{50%{transform:scale(1.04);box-shadow:0 0 18px #ffd34f}}@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}@keyframes pulse{to{transform:scale(1.12) rotate(4deg)}}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.games{grid-template-columns:1fr 1fr}.lower{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.top{align-items:flex-start}.logo{font-size:25px}.nav{gap:5px}.nav button{padding:9px 10px;font-size:13px}.hero{padding:21px}.hero h1{font-size:35px}.games{grid-template-columns:1fr}.jackpots{grid-template-columns:1fr}.reel{height:63px;font-size:29px}.stats{grid-template-columns:1fr 1fr}}
+
+.sports{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.match{background:linear-gradient(145deg,#111d34,#0a1221);border:1px solid #2e4166;border-radius:19px;padding:16px}
+.match-top{display:flex;justify-content:space-between;align-items:center;color:#8f9bb4;font-size:13px;margin-bottom:14px}
+.live{color:#ff6979;font-weight:900}.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;text-align:center}
+.team{font-size:16px;font-weight:800}.crest{font-size:30px;display:block;margin-bottom:5px}.score{font-size:24px;font-weight:900;color:var(--gold)}
+.match-actions{display:flex;gap:8px;margin-top:15px}.match-actions button{flex:1;padding:10px;border-radius:11px;background:#111d34;color:#fff;border:1px solid #34496f}
+.match-actions button:hover{border-color:var(--gold)}
+@media(max-width:700px){.sports{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="top">
+<div class="logo">🎰 <span>Arena</span><b>Bet</b></div>
+<div class="nav">
+<button onclick="openModal('profile')">👤 Profil</button>
+<button onclick="openModal('verify')">🛡️ Doğrulama</button>
+<button class="gold" onclick="openModal('payment')">💳 Bilgiler</button>
+</div></div></header>
+
+<main class="wrap">
+<section class="hero"><div class="hero-grid">
+<div><div class="eyebrow">ARENA BET • SANAL OYUN</div><h1>Sanal Oyun Salonu</h1><p>Modern, hızlı ve mobil uyumlu özgün oyun deneyimi.</p>
+</div>
+<div class="balance"><small>SANAL BAKİYE</small><div class="money" id="balance">10.000</div><div class="balance-row"><button class="gold" onclick="bonus()">+10.000 Bakiye</button><button class="ghost" onclick="resetDemo()">Sıfırla</button></div></div>
+</div></section>
+
+<div class="stats">
+<div class="stat"><small>🎮 Oynanan</small><strong id="played">0</strong></div>
+<div class="stat"><small>🏆 Kazanç</small><strong id="wins">0</strong></div>
+<div class="stat"><small>🔥 Seri</small><strong id="streak">0</strong></div>
+<div class="stat"><small>⭐ Seviye</small><strong id="level">1</strong></div>
+</div>
+
+<div class="section-title"><h2>🔥 Popüler Oyunlar</h2><span class="pill">● CANLI DEMO</span></div>
+<section class="games">
+<div class="card"><div class="card-head"><h3>Olympus Fortune</h3><span class="tag">POPÜLER</span></div><div class="sub">5×1 • Mitolojik slot</div><div class="reels" id="r1"></div><button class="spin" onclick="spin('r1','res1',100,this)">SPIN · 100</button><div class="result" id="res1"></div></div>
+<div class="card"><div class="card-head"><h3>Sweet Kingdom</h3><span class="tag">BONUS</span></div><div class="sub">5×1 • Şeker krallığı</div><div class="reels" id="r2"></div><button class="spin" onclick="spin('r2','res2',250,this)">SPIN · 250</button><div class="result" id="res2"></div></div>
+<div class="card"><div class="card-head"><h3>Golden Catch</h3><span class="tag">VIP</span></div><div class="sub">5×1 • Altın avı</div><div class="reels" id="r3"></div><button class="spin" onclick="spin('r3','res3',500,this)">SPIN · 500</button><div class="result" id="res3"></div></div>
+<div class="card"><div class="card-head"><h3>Dragon Vault</h3><span class="tag">YENİ</span></div><div class="sub">5×1 • Ejderha hazinesi</div><div class="reels" id="r4"></div><button class="spin" onclick="spin('r4','res4',750,this)">SPIN · 750</button><div class="result" id="res4"></div></div>
+<div class="card"><div class="card-head"><h3>Neon 7</h3><span class="tag">HIZLI</span></div><div class="sub">5×1 • Neon şehir</div><div class="reels" id="r5"></div><button class="spin" onclick="spin('r5','res5',1000,this)">SPIN · 1.000</button><div class="result" id="res5"></div></div>
+<div class="card"><div class="card-head"><h3>Royal Crown</h3><span class="tag">PRESTİJ</span></div><div class="sub">5×1 • Kraliyet</div><div class="reels" id="r6"></div><button class="spin" onclick="spin('r6','res6',1500,this)">SPIN · 1.500</button><div class="result" id="res6"></div></div>
+</section>
+
+
+<div class="section-title"><h2>⚽ Spor & Maçlar</h2><span class="pill">● CANLI DEMO</span></div>
+<section class="sports">
+<div class="match">
+<div class="match-top"><span>⚽ Futbol • Süper Lig</span><span class="live">● CANLI</span></div>
+<div class="teams"><div class="team"><span class="crest">🔴⚪</span>Antalya</div><div class="score">1 : 1</div><div class="team"><span class="crest">🟡🔵</span>İstanbul</div></div>
+<div class="match-actions"><button onclick="toast('Maç detayları demo olarak açıldı')">Maç Detayı</button><button onclick="toast('Canlı istatistikler demo')">İstatistik</button></div>
+</div>
+<div class="match">
+<div class="match-top"><span>⚽ Futbol • Avrupa</span><span>20:45</span></div>
+<div class="teams"><div class="team"><span class="crest">🔵⚪</span>Manchester</div><div class="score">- : -</div><div class="team"><span class="crest">⚫🔴</span>Milan</div></div>
+<div class="match-actions"><button onclick="toast('Maç detayları demo olarak açıldı')">Maç Detayı</button><button onclick="toast('Kadrolar demo')">Kadrolar</button></div>
+</div>
+<div class="match">
+<div class="match-top"><span>🏀 Basketbol</span><span>21:30</span></div>
+<div class="teams"><div class="team"><span class="crest">🏀</span>Anadolu</div><div class="score">- : -</div><div class="team"><span class="crest">🏀</span>Madrid</div></div>
+<div class="match-actions"><button onclick="toast('Maç detayları demo olarak açıldı')">Maç Detayı</button><button onclick="toast('İstatistikler demo')">İstatistik</button></div>
+</div>
+<div class="match">
+<div class="match-top"><span>🎾 Tenis</span><span>22:00</span></div>
+<div class="teams"><div class="team"><span class="crest">🎾</span>Oyuncu A</div><div class="score">- : -</div><div class="team"><span class="crest">🎾</span>Oyuncu B</div></div>
+<div class="match-actions"><button onclick="toast('Maç detayları demo olarak açıldı')">Maç Detayı</button><button onclick="toast('Turnuva bilgisi demo')">Turnuva</button></div>
+</div>
+</section>
+
+<div class="section-title"><h2>🏆 Büyük Ödüller</h2></div>
+<section class="jackpots">
+<div class="jp"><small>OLYMPUS</small><strong>125.450</strong></div><div class="jp"><small>SWEET KINGDOM</small><strong>248.900</strong></div><div class="jp"><small>GOLDEN CATCH</small><strong>512.750</strong></div>
+</section>
+
+<div class="section-title"><h2>🎯 Günlük Görevler</h2></div>
+<section class="lower">
+<div class="panel"><h3>Bugünün Görevleri</h3>
+<div class="mission"><span>3 spin tamamla<br><small>Herhangi bir oyun</small></span><span class="badge" id="m1">0/3</span></div>
+<div class="mission"><span>5.000 sanal kazan<br><small>Toplam kazanç</small></span><span class="badge" id="m2">0/5.000</span></div>
+<div class="mission"><span>Seviye 3'e ulaş<br><small>Oyna ve ilerle</small></span><span class="badge" id="m3">1/3</span></div>
+</div>
+<div class="panel"><h3>🏅 Liderlik Tablosu</h3>
+<div class="mission"><span>🥇 AltınOyuncu</span><b>98.450</b></div><div class="mission"><span>🥈 ArenaKralı</span><b>76.220</b></div><div class="mission"><span>🥉 Şanslı7</span><b>61.800</b></div><div class="mission"><span>⭐ Sen</span><b id="leader">10.000</b></div>
+</div></section>
+
+<footer>ArenaBet • Sanal Oyun</footer>
+</main>
+
+<div class="modal" id="profile"><div class="box"><button class="close" onclick="closeModal('profile')">✕</button><h2>👤 Profil</h2><p><b>Arena Oyuncusu</b></p><p>Bakiye: <b id="profileBalance">10.000</b></p><p>Seviye: <b id="profileLevel">1</b></p></div></div>
+<div class="modal" id="verify"><div class="box"><button class="close" onclick="closeModal('verify')">✕</button><h2>🛡️ Profil Doğrulama</h2><input class="field" placeholder="Ad Soyad"><input class="field" placeholder="E-posta"><button class="gold" onclick="closeModal('verify');toast('Demo doğrulama tamamlandı')">Doğrula</button></div></div>
+<div class="modal" id="payment"><div class="box"><button class="close" onclick="closeModal('payment')">✕</button><h2>💳 Bakiye Yükle</h2><p><b>Hesap Sahibi:</b> Hüseyin Can Bekmez</p><p>IBAN:</p><input class="field" value="TR10 0006 2000 0130 0006 8709 86" readonly><button class="gold" onclick="navigator.clipboard&&navigator.clipboard.writeText('TR10 0006 2000 0130 0006 8709 86');toast('IBAN kopyalandı')">IBAN'ı Kopyala</button></div></div>
+
+<div class="win-overlay" id="winOverlay"><div class="win-card"><div class="win-icon">🎉</div><div class="win-title">KAZANDIN!</div><div class="win-amount" id="winAmount">+0 sanal bakiye</div><button class="win-close" onclick="closeWin()">DEVAM ET</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const icons=['🍒','⭐','💎','7️⃣','🍋','🔔','🪙','👑','🐉','🍬'];
+let balance=10000,played=0,wins=0,streak=0,totalWon=0;
+function fmt(n){return n.toLocaleString('tr-TR')}
+function render(id){document.getElementById(id).innerHTML=Array.from({length:5},()=>'<div class="reel">❔</div>').join('')}
+['r1','r2','r3','r4','r5','r6'].forEach(render);
+function update(){
+ document.getElementById('balance').textContent=fmt(balance);
+ document.getElementById('profileBalance').textContent=fmt(balance);
+ document.getElementById('played').textContent=played;
+ document.getElementById('wins').textContent=fmt(totalWon);
+ document.getElementById('streak').textContent=streak;
+ const level=Math.min(10,1+Math.floor(played/5));
+ document.getElementById('level').textContent=level;
+ document.getElementById('profileLevel').textContent=level;
+ document.getElementById('leader').textContent=fmt(balance);
+ document.getElementById('m1').textContent=Math.min(3,played)+'/3';
+ document.getElementById('m2').textContent=fmt(Math.min(5000,totalWon))+'/5.000';
+ document.getElementById('m3').textContent=level+'/3';
+}
+function bonus(){balance+=10000;update();toast('+10.000 sanal bakiye eklendi')}
+function resetDemo(){balance=10000;played=0;wins=0;streak=0;totalWon=0;update();toast('Demo sıfırlandı')}
+function spin(id,res,cost,btn){
+ if(balance<cost){document.getElementById(res).textContent='Yetersiz sanal bakiye';toast('Sanal bakiyen yetersiz');return}
+ balance-=cost;played++;update();btn.disabled=true;
+ const boxes=[...document.getElementById(id).children];boxes.forEach(x=>x.classList.add('spinning'));
+ let ticks=0;
+ const timer=setInterval(()=>{
+  boxes.forEach(x=>x.textContent=icons[Math.floor(Math.random()*icons.length)]);
+  ticks++;
+  if(ticks>=18){
+   clearInterval(timer);btn.disabled=false;boxes.forEach(x=>x.classList.remove('spinning'));
+   const vals=boxes.map(x=>x.textContent),same=vals.every(v=>v===vals[0]);
+   let win=0;
+   if(same) win=cost*10;
+   else if(Math.random()<.35) win=cost*2;
+   if(win){
+    balance+=win;wins++;streak++;totalWon+=win;update();
+    document.getElementById(res).textContent='🎉 KAZANDIN! +'+fmt(win)+' sanal';
+    showWin(win);
+   }else{
+    streak=0;update();document.getElementById(res).textContent='Tekrar dene!';
+   }
+  }
+ },70);
+}
+function showWin(amount){document.getElementById('winAmount').textContent='+'+fmt(amount)+' sanal bakiye';document.getElementById('winOverlay').style.display='flex'}
+function closeWin(){document.getElementById('winOverlay').style.display='none'}
+function openModal(id){document.getElementById(id).style.display='flex'}
+function closeModal(id){document.getElementById(id).style.display='none'}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
+window.onclick=e=>{if(e.target.classList.contains('modal'))e.target.style.display='none';if(e.target.id==='winOverlay')closeWin()}
+update();
+</script>
+</body>
+</html>
